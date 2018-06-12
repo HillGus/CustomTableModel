@@ -14,12 +14,18 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	private static final long serialVersionUID = 1L;	
 	
 	private ArrayList<T> objetos;
+	private ArrayList<T> objetosFiltrados = new ArrayList<>();
+	
+	private ArrayList<Filtro> filtros = new ArrayList<>();
+	
+	private int[] indexes;
+	
 	
 	public static void main(String[] args) {
 		
 		ArrayList<Objeto> a = new ArrayList<>();
-		a.add(new Objeto());
-		a.add(new Objeto());
+		a.add(new Objeto("Gustavo", 16));
+		a.add(new Objeto("Nathan", 19));
 		
 		CustomTableModel<Objeto> tabela = new CustomTableModel<>(a);
 		
@@ -34,31 +40,138 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		frm.add(table);
 		
 		frm.setVisible(true);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {}
+		
+		tabela.addFiltro("Gustavo", 0);
+		tabela.filtrar();
 	}
+	
 	
 	public CustomTableModel() {}
 	
 	public CustomTableModel(ArrayList<T> objetos) {
 		
+		for (T obj : objetos) {
+			
+			objetosFiltrados.add(obj);
+		}
+		
 		setObjects(objetos);
 	}
+	
+	
+	public void addFiltro(String filtro) {
+		
+		filtros.add(new Filtro(filtro, objetos.get(0).getInfo().length));
+	}
+	
+	public void addFiltro(String filtro, int index) {
+		
+		filtros.add(new Filtro(filtro, new int[] {index}));
+	}
+	
+	public void addFiltro(String filtro, int[] indexes) {
+		
+		filtros.add(new Filtro(filtro, indexes));
+	}
+	
+	public void filtrar() {
+		
+		objetosFiltrados.clear();
+		
+		for (T obj : objetos) {
+			
+			if (matchesFilters(obj)) {
+				
+				objetosFiltrados.add(obj);
+			}
+		}
+		
+		atualizar();
+	}
+	
+	private boolean matchesFilters(T obj) {
+		
+		for (Filtro filtro : filtros) {
+			
+			if (!filtro.matches(obj)) {
+				
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private void atualizar() {
+		
+		criarIndexes();
+		
+		atualizarColunas();
+		atualizarLinhas();
+	}
+	
+	private void atualizarColunas() {
+		
+		setColumnCount(0);
+		
+		for (int i : indexes) {
+			
+			addColumn(objetos.get(0).getInfoName()[i]);
+		}
+	}
+	
+	private void atualizarLinhas() {
+		
+		setRowCount(0);
+
+		for (T obj : objetosFiltrados) {
+			
+			Object[] info = obj.getInfo();
+			Object[] rowInfo = new Object[indexes.length];
+			
+			for (int i = 0; i < indexes.length; i++) {
+				
+				int index = indexes[i];
+				
+				rowInfo[i] = info[index];
+			}
+			
+			addRow(rowInfo);
+		}
+	}
+	
+	private void criarIndexes() {
+		
+		if (indexes == null) {
+			
+			int[] indexes = new int[objetos.get(0).getInfo().length];
+			
+			for (int i = 0; i < indexes.length; i++) {
+				
+				indexes[i] = i;
+			}
+			
+			this.indexes = indexes;
+		}
+	}
+	
 	
 	public void setObjects(ArrayList<T> objetos) {
 		
 		this.objetos = objetos;
 		
-		setRowCount(0);
-		setColumnCount(0);
+		atualizar();
+	}
+	
+	public void setIndexes(int[] indexes) {
 		
-		for (int i = 0; i < objetos.get(0).getInfoName().length; i++) {
-			
-			addColumn(objetos.get(0).getInfoName()[i]);
-		}
+		this.indexes = indexes;
 		
-		for (int i = 0; i < objetos.size(); i++) {
-		
-			addRow(objetos.get(i).getInfo());
-		}
+		atualizar();
 	}
 	
 	public JTable getTable() {
@@ -76,9 +189,14 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		
 		return new JScrollPane(getTable());
 	}
-	
+		
 	public T getObject(int index) {
 		
 		return objetos.get(index);
+	}
+
+	public T getShownObject(int index) {
+		
+		return objetosFiltrados.get(index);
 	}
 }

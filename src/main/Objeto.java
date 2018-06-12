@@ -2,10 +2,19 @@ package main;
 
 public class Objeto implements ObjectInfo {
 
+	private String nome;
+	private int idade;
+	
+	public Objeto(String nome, int idade) {
+		
+		this.nome = nome;
+		this.idade = idade;
+	}
+	
 	@Override
 	public Object[] getInfo() {
 
-		return new Object[] {"Teasdasd", 2};
+		return new Object[] {nome, idade};
 	}
 
 	@Override
