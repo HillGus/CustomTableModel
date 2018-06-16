@@ -1,4 +1,4 @@
-package main;
+package tableModel;
 
 import java.util.ArrayList;
 
@@ -14,9 +14,6 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	private static final long serialVersionUID = 1L;	
 	
 	private ArrayList<T> objetos;
-	private ArrayList<T> objetosFiltrados = new ArrayList<>();
-	
-	private ArrayList<Filtro> filtros = new ArrayList<>();
 	
 	private int[] indexes;
 	
@@ -40,13 +37,6 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		frm.add(table);
 		
 		frm.setVisible(true);
-		
-		try {
-			Thread.sleep(1000);
-		} catch (Exception e) {}
-		
-		tabela.addFiltro("Gustavo", 0);
-		tabela.filtrar();
 	}
 	
 	
@@ -54,59 +44,11 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	
 	public CustomTableModel(ArrayList<T> objetos) {
 		
-		for (T obj : objetos) {
-			
-			objetosFiltrados.add(obj);
-		}
-		
 		setObjects(objetos);
 	}
 	
 	
-	public void addFiltro(String filtro) {
-		
-		filtros.add(new Filtro(filtro, objetos.get(0).getInfo().length));
-	}
-	
-	public void addFiltro(String filtro, int index) {
-		
-		filtros.add(new Filtro(filtro, new int[] {index}));
-	}
-	
-	public void addFiltro(String filtro, int[] indexes) {
-		
-		filtros.add(new Filtro(filtro, indexes));
-	}
-	
-	public void filtrar() {
-		
-		objetosFiltrados.clear();
-		
-		for (T obj : objetos) {
-			
-			if (matchesFilters(obj)) {
-				
-				objetosFiltrados.add(obj);
-			}
-		}
-		
-		atualizar();
-	}
-	
-	private boolean matchesFilters(T obj) {
-		
-		for (Filtro filtro : filtros) {
-			
-			if (!filtro.matches(obj)) {
-				
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	private void atualizar() {
+	public void atualizar() {
 		
 		criarIndexes();
 		
@@ -128,7 +70,7 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		
 		setRowCount(0);
 
-		for (T obj : objetosFiltrados) {
+		for (T obj : objetos) {
 			
 			Object[] info = obj.getInfo();
 			Object[] rowInfo = new Object[indexes.length];
@@ -195,8 +137,4 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		return objetos.get(index);
 	}
 
-	public T getShownObject(int index) {
-		
-		return objetosFiltrados.get(index);
-	}
 }

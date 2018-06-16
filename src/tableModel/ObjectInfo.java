@@ -1,4 +1,4 @@
-package main;
+package tableModel;
 
 public interface ObjectInfo {
 

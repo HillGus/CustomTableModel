@@ -1,6 +1,6 @@
-package main;
+package tableModel;
 
-public class Objeto implements ObjectInfo {
+class Objeto implements ObjectInfo {
 
 	private String nome;
 	private int idade;
