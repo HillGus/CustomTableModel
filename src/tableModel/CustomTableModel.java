@@ -2,7 +2,6 @@ package tableModel;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -16,28 +15,6 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	private ArrayList<T> objetos;
 	
 	private ArrayList<Integer> indexes = new ArrayList<>();
-	
-	
-	public static void main(String[] args) {
-		
-		ArrayList<Objeto> a = new ArrayList<>();
-		a.add(new Objeto("Gustavo", 16));
-		a.add(new Objeto("Nathan", 19));
-		
-		CustomTableModel<Objeto> tabela = new CustomTableModel<>(a);
-		
-		JFrame frm = new JFrame();
-		frm.setSize(300, 300);
-		frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frm.setLayout(null);
-		
-		JScrollPane table = tabela.getScroll();
-		table.setBounds(25, 25, 250, 250);
-		
-		frm.add(table);
-		
-		frm.setVisible(true);
-	}
 	
 	
 	public CustomTableModel() {}
@@ -70,6 +47,8 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		
 		setRowCount(0);
 
+		int j = 0;
+		
 		for (T obj : objetos) {
 			
 			Object[] info = obj.getInfo();
@@ -88,9 +67,9 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	
 	private void criarIndexes() {
 		
-		indexes.clear();;
+		indexes.clear();
 		
-		for (int i = 0; i < objetos.get(0).getInfo().length; i++) {
+		for (int i = 0; i < objetos.get(objetos.size() - 1).getInfo().length; i++) {
 			
 			indexes.add(i);
 		}
