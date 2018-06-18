@@ -88,17 +88,16 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	
 	private void criarIndexes() {
 		
-		if (indexes == null) {
+		indexes = null;
+		
+		int[] indexes = new int[objetos.get(0).getInfo().length];
+		
+		for (int i = 0; i < indexes.length; i++) {
 			
-			int[] indexes = new int[objetos.get(0).getInfo().length];
-			
-			for (int i = 0; i < indexes.length; i++) {
-				
-				indexes[i] = i;
-			}
-			
-			this.indexes = indexes;
+			indexes[i] = i;
 		}
+		
+		this.indexes = indexes;
 	}
 	
 	
