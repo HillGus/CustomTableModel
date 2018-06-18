@@ -15,7 +15,7 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	
 	private ArrayList<T> objetos;
 	
-	private int[] indexes;
+	private ArrayList<Integer> indexes = new ArrayList<>();
 	
 	
 	public static void main(String[] args) {
@@ -73,11 +73,11 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		for (T obj : objetos) {
 			
 			Object[] info = obj.getInfo();
-			Object[] rowInfo = new Object[indexes.length];
+			Object[] rowInfo = new Object[indexes.size()];
 			
-			for (int i = 0; i < indexes.length; i++) {
+			for (int i = 0; i < indexes.size(); i++) {
 				
-				int index = indexes[i];
+				int index = indexes.get(i);
 				
 				rowInfo[i] = info[index];
 			}
@@ -88,16 +88,12 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	
 	private void criarIndexes() {
 		
-		indexes = null;
+		indexes.clear();;
 		
-		int[] indexes = new int[objetos.get(0).getInfo().length];
-		
-		for (int i = 0; i < indexes.length; i++) {
+		for (int i = 0; i < objetos.get(0).getInfo().length; i++) {
 			
-			indexes[i] = i;
+			indexes.add(i);
 		}
-		
-		this.indexes = indexes;
 	}
 	
 	
@@ -110,7 +106,12 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	
 	public void setIndexes(int[] indexes) {
 		
-		this.indexes = indexes;
+		this.indexes.clear();
+		
+		for (int index : indexes) {
+			
+			this.indexes.add(index);
+		}
 		
 		atualizar();
 	}
