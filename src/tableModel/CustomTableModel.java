@@ -25,6 +25,47 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 	}
 	
 	
+	public void setObjects(ArrayList<T> objetos) {
+		
+		this.objetos = objetos;
+		
+		atualizar();
+	}
+	
+	public void setIndexes(int[] indexes) {
+		
+		this.indexes.clear();
+		
+		for (int index : indexes) {
+			
+			this.indexes.add(index);
+		}
+		
+		atualizar();
+	}
+	
+	public JTable getTable() {
+		
+		JTable tabela = new JTable(this);
+		tabela.setDefaultEditor(Object.class, null);
+		
+		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) tabela.getDefaultRenderer(Object.class);
+		renderer.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		return tabela;
+	}
+	
+	public JScrollPane getScroll() {
+		
+		return new JScrollPane(getTable());
+	}
+		
+	public T getObject(int index) {
+		
+		return objetos.get(index);
+	}
+	
+	
 	public void atualizar() {
 		
 		criarIndexes();
@@ -74,46 +115,4 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 			indexes.add(i);
 		}
 	}
-	
-	
-	public void setObjects(ArrayList<T> objetos) {
-		
-		this.objetos = objetos;
-		
-		atualizar();
-	}
-	
-	public void setIndexes(int[] indexes) {
-		
-		this.indexes.clear();
-		
-		for (int index : indexes) {
-			
-			this.indexes.add(index);
-		}
-		
-		atualizar();
-	}
-	
-	public JTable getTable() {
-		
-		JTable tabela = new JTable(this);
-		tabela.setDefaultEditor(Object.class, null);
-		
-		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) tabela.getDefaultRenderer(Object.class);
-		renderer.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		return tabela;
-	}
-	
-	public JScrollPane getScroll() {
-		
-		return new JScrollPane(getTable());
-	}
-		
-	public T getObject(int index) {
-		
-		return objetos.get(index);
-	}
-
 }
