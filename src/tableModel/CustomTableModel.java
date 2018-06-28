@@ -110,9 +110,15 @@ public class CustomTableModel<T extends ObjectInfo> extends DefaultTableModel {
 		
 		indexes.clear();
 		
-		for (int i = 0; i < objetos.get(objetos.size() - 1).getInfo().length; i++) {
+		try {
 			
-			indexes.add(i);
+			for (int i = 0; i < objetos.get(objetos.size() - 1).getInfo().length; i++) {
+				
+				indexes.add(i);
+			}
+		} catch (Exception e) {
+			
+			System.out.println("Não foi dessa vez");
 		}
 	}
 }
